@@ -11,6 +11,14 @@
   ->OuT<- (("Display"))
 }}
 
+>IntegeR< sum ((>IntegeR< a,, >IntegeR< b))
+{{
+  >IntegeR< s
+  s := a + b
+  ->OuT<- (("sum"))
+  >BacK< s
+}}
+
 >IntegeR< ->MaiN<-(())
 {{
   
@@ -49,9 +57,19 @@
   num3 := num1 / num2
   num3 := num1 % num2
 
+  num3 := num1 ** num2
+
+  num3 := num1 AnD num2
+  num3 := num1 OR num2
+  num3 := num1 XoR num2
+
+  num3 := NoT num1
+
   ->SizeoF<-((num3))
 
   ->-> This is a comment
+
+  arr := >IntegeR<((2))[1,, 2]
 
   num1 := 10
   ->IF<- ((num1 EquaL 7))
@@ -67,7 +85,26 @@
     ->OuT<- (("Not Found"))
   }}
 
+  num1 := 10
+  ->SwitcH<- ((num1))
+  {{
+    >CasE< 5::
+    ((
+      ->OuT<- ((5))
+    ))
+    >CasE< 7::
+    ((
+      ->OuT<- ((7))
+    ))
+    >Default<::
+    ((
+      ->OuT<- (("Not Found"))
+    ))
+  }}
+
   display(())
+
+  sum((5 ,, 7))
 
   >BacK< 0
   

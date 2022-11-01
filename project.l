@@ -5,12 +5,13 @@ INT_NUMBER [0-9]+
 REAL_NUMBER	[-]?[0-9]+[.]?[0-9]*
 VARIABLE [a-zA-Z][a-zA-Z_0-9]*
 DATA_TYPE ">IntegeR<"|">CharacteR<"|">LonG<"|">FloaT<"|">FloaT64<"
-OPERATOR "+"|"-"|"*"|"/"|"%"
+OPERATOR "+"|"-"|"*"|"/"|"%"|"**"
 INC_DEC "IncremenT1"|"DecremenT1"
 LOGICAL_OPERATOR "<"|">"|"<="|">="|"EquaL"|"&AnD"|"|OR"|"!NoT"
 LOOP_INIT [ ]*{VARIABLE}[ ]*":="[ ]*{INT_NUMBER}[ ]*
 LOOP_COND [ ]*({VARIABLE}|{INT_NUMBER})[ ]*{LOGICAL_OPERATOR}[ ]*({VARIABLE}|{INT_NUMBER})[ ]*
 LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
+BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 %%
 "#ImporT >".+".h<" {printf("Header file included");}
@@ -19,7 +20,7 @@ LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
 
 ">IntegeR< "{VARIABLE}[ ]? {printf("Integer without initilization");}
 
-">CharacteR< "{VARIABLE}[ ]?":="[ ]?[.] {printf("Character with initilization");}
+">CharacteR< "{VARIABLE}[ ]?":="[ ]?. {printf("Character with initilization");}
 
 ">CharacteR< "{VARIABLE}[ ]? {printf("Character without initilization");}
 
@@ -35,14 +36,26 @@ LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
 
 ">FloaT64< "{VARIABLE}[ ]? {printf("Double without initilization");}
 
+{VARIABLE}[ ]?":="[ ]*{DATA_TYPE}"(("{INT_NUMBER}"))["[ ]?{INT_NUMBER}",,"[ ]?{INT_NUMBER}"]" {
+  printf("defining array");
+}
+
 ">VoiD<" {printf("Void DataType");}
 
 {VARIABLE}[ ]?":="[ ]*{VARIABLE}[ ]?{OPERATOR}[ ]?{VARIABLE} {
-  printf("%s", yytext);
+  printf("String is %s", yytext);
+}
+
+{VARIABLE}[ ]?":="[ ]*{VARIABLE}[ ]?{BITWISE_OPERATOR}[ ]?{VARIABLE} {
+  printf("String is %s", yytext);
+}
+
+{VARIABLE}[ ]?":="[ ]*"NoT "{VARIABLE} {
+  printf("String is %s", yytext);
 }
 
 {VARIABLE}[ ]?":="[ ]?({VARIABLE}|{REAL_NUMBER}|{INT_NUMBER}) {
-  printf("%s", yytext);
+  printf("String is %s", yytext);
 }
 
 "+" {printf("Plus sign");}
@@ -54,6 +67,8 @@ LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
 "/" {printf("division sign");}
 
 "%" {printf("Modulas operation");}
+
+"**" {printf("Power operation");}
 
 ">" {printf("Greater");}
 
@@ -82,6 +97,8 @@ LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
 "))" {printf("bracket ended");}
 
 ";;" {printf("semi-colon");}
+
+",," {printf("comma");}
 
 "->FoR<-"[ ]?"(("{LOOP_INIT}"::"{LOOP_COND}"::"{LOOP_INC_DEC}"))"[ ]? {printf("For loop");}
 
@@ -121,23 +138,35 @@ LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
 
 "DecremenT1" {printf("For decrementing the variable value 1");}
 
-"AnD" {printf("Binary AND operation");}
+"AnD" {printf("Bitwise AND operation");}
 
-"OR" {printf("Binary OR operation");}
+"OR" {printf("Bitwise OR operation");}
 
-"NoT" {printf("Binary NOT operation");}
+"NoT" {printf("Bitwise NOT operation");}
 
-"->SwitcH<-" {printf("defining switch statement");}
+"XoR" {printf("Bitwise XOR operation");}
 
-">CasE<" {printf("defining case statement");}
+"->SwitcH<-"[ ]?"(("[ ]*({VARIABLE}|{INT_NUMBER}|{REAL_NUMBER})[ ]*"))" {
+  printf("defining switch statement");
+}
 
-"->PoweR<-" {printf("defining power function");}
+">CasE< "({INT_NUMBER}|{REAL_NUMBER})"::" {printf("defining case statement");}
+
+">Default<::" {printf("default statement");}
 
 (">IntegeR<"|">VoiD<")[ ]"->MaiN<-"[ ]?"(())" {printf("defining main function");}
+
+({DATA_TYPE}|">VoiD<")[ ]{VARIABLE}[ ]?"(("[ ]*{DATA_TYPE}[ ]+{VARIABLE}[ ]*",,"[ ]*{DATA_TYPE}[ ]+{VARIABLE}[ ]*"))" {
+  printf("Function with parameter");
+}
 
 ({DATA_TYPE}|">VoiD<")[ ]{VARIABLE}[ ]?"(())" {printf("defining a function");}
 
 {VARIABLE}"(())" {printf("function calling");}
+
+{VARIABLE}"(("[ ]*({VARIABLE}|{INT_NUMBER}|{REAL_NUMBER})[ ]*",,"[ ]*({VARIABLE}|{INT_NUMBER}|{REAL_NUMBER})[ ]*"))" {
+  printf("parameterize function calling");
+}
 
 . {}
 
@@ -152,7 +181,7 @@ int main()
 {
 
     yyin = freopen("input.txt","r",stdin);
-	  //yyout = freopen("output.txt","w",stdout);
+	  yyout = freopen("output.txt","w",stdout);
     yylex();
     return 0;
 }
