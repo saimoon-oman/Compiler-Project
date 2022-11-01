@@ -1,0 +1,56 @@
+Header file included
+
+GreaterLessdefining main functionCurly bracket started
+Integer with initilization
+Integer without initilization
+GreaterLess
+GreaterLess
+Curly bracket end
+
+GreaterLess
+GreaterLess
+Long
+Float
+Double
+Void
+Greater
+Less
+GreaterEqual
+LessEqual
+Assign
+Curly bracket started
+Curly bracket end
+bracket started
+bracket ended
+semi-colon
+return statement
+for printing value
+For loop
+While loop
+for input of value
+Logical Equal
+Logical AND operation
+Logical OR operation
+Logical NOT opeation
+for continuing loop
+for breaking from loop
+static key word
+Plus sign
+minus sign
+for defining structure
+for defining the size of variable
+inline comment
+for using if statement
+for using else if statement
+for using else statement
+multiplication sign
+division sign
+For incrementing the variable value 1
+For decrementing the variable value 1
+Binary AND operation
+Binary OR operation
+Binary NOT operation
+defining switch statement
+defining case statement
+defining power function
+defining main function
