@@ -2056,7 +2056,7 @@ case 12:
 YY_RULE_SETUP
 #line 39 "project.l"
 {
-  printf("ARRAY");
+  printf("defining array");
 }
 	YY_BREAK
 case 13:
@@ -3254,7 +3254,7 @@ int main()
 {
 
     yyin = freopen("input.txt","r",stdin);
-	  //yyout = freopen("output.txt","w",stdout);
+	  yyout = freopen("output.txt","w",stdout);
     yylex();
     return 0;
 }
