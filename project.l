@@ -100,6 +100,8 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 ",," {printf("comma");}
 
+"::" {printf("colon");}
+
 "->FoR<-"[ ]?"(("{LOOP_INIT}"::"{LOOP_COND}"::"{LOOP_INC_DEC}"))"[ ]? {printf("For loop");}
 
 "->WhilE<-"[ ]?"(("{LOOP_COND}"))"[ ]? {printf("While loop");}
@@ -152,7 +154,7 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 ">CasE< "({INT_NUMBER}|{REAL_NUMBER})"::" {printf("defining case statement");}
 
-">Default<::" {printf("default statement");}
+">DefaulT<::" {printf("default statement");}
 
 (">IntegeR<"|">VoiD<")[ ]"->MaiN<-"[ ]?"(())" {printf("defining main function");}
 
