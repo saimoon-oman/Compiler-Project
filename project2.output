@@ -1,0 +1,275 @@
+Terminals unused in grammar
+
+   CHAR
+   VOID
+   PLUS
+   MINUS
+   MUL
+   DIV
+   MOD
+   POW
+   GT
+   LT
+   GTE
+   LTE
+   EQUAL
+   LOGICALAND
+   LOGICALOR
+   LOGICALNOT
+   LPAR
+   RPAR
+   LBRA
+   RBRA
+   SEMICOLON
+   COLON
+   FOR
+   WHILE
+   BACK
+   OUT
+   IN
+   CONTINUE
+   BREAK
+   STRUCT
+   SIZEOF
+   IF
+   ELSEIF
+   ELSE
+   INCREMENT
+   DECREMENT
+   AND
+   OR
+   NOT
+   XOR
+   SWITCH
+   CASE
+   DEFAULT
+   REALVAL
+
+
+Rules useless in parser due to conflicts
+
+    3 statement: /* empty */
+
+
+State 1 conflicts: 3 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: /* empty */
+    2        | program statement
+
+    3 statement: /* empty */
+    4          | declaration
+
+    5 declaration: TYPE expression1
+
+    6 TYPE: INT
+    7     | FLOAT
+
+    8 expression1: expression1 COMMA expression
+    9            | expression
+
+   10 expression: VAR ASSIGN INTVAL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+INT (258) 6
+FLOAT (259) 7
+CHAR (260)
+VOID (261)
+PLUS (262)
+MINUS (263)
+MUL (264)
+DIV (265)
+MOD (266)
+POW (267)
+GT (268)
+LT (269)
+GTE (270)
+LTE (271)
+EQUAL (272)
+LOGICALAND (273)
+LOGICALOR (274)
+LOGICALNOT (275)
+ASSIGN (276) 10
+LPAR (277)
+RPAR (278)
+LBRA (279)
+RBRA (280)
+SEMICOLON (281)
+COMMA (282) 8
+COLON (283)
+FOR (284)
+WHILE (285)
+BACK (286)
+OUT (287)
+IN (288)
+CONTINUE (289)
+BREAK (290)
+STRUCT (291)
+SIZEOF (292)
+IF (293)
+ELSEIF (294)
+ELSE (295)
+INCREMENT (296)
+DECREMENT (297)
+AND (298)
+OR (299)
+NOT (300)
+XOR (301)
+SWITCH (302)
+CASE (303)
+DEFAULT (304)
+INTVAL (305) 10
+REALVAL (306)
+VAR (307) 10
+
+
+Nonterminals, with rules where they appear
+
+$accept (53)
+    on left: 0
+program (54)
+    on left: 1 2, on right: 0 2
+statement (55)
+    on left: 3 4, on right: 2
+declaration (56)
+    on left: 5, on right: 4
+TYPE (57)
+    on left: 6 7, on right: 5
+expression1 (58)
+    on left: 8 9, on right: 5 8
+expression (59)
+    on left: 10, on right: 8 9
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    2 program: program . statement
+
+    $end   shift, and go to state 2
+    INT    shift, and go to state 3
+    FLOAT  shift, and go to state 4
+
+    $end   [reduce using rule 3 (statement)]
+    INT    [reduce using rule 3 (statement)]
+    FLOAT  [reduce using rule 3 (statement)]
+
+    statement    go to state 5
+    declaration  go to state 6
+    TYPE         go to state 7
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+    6 TYPE: INT .
+
+    $default  reduce using rule 6 (TYPE)
+
+
+state 4
+
+    7 TYPE: FLOAT .
+
+    $default  reduce using rule 7 (TYPE)
+
+
+state 5
+
+    2 program: program statement .
+
+    $default  reduce using rule 2 (program)
+
+
+state 6
+
+    4 statement: declaration .
+
+    $default  reduce using rule 4 (statement)
+
+
+state 7
+
+    5 declaration: TYPE . expression1
+
+    VAR  shift, and go to state 8
+
+    expression1  go to state 9
+    expression   go to state 10
+
+
+state 8
+
+   10 expression: VAR . ASSIGN INTVAL
+
+    ASSIGN  shift, and go to state 11
+
+
+state 9
+
+    5 declaration: TYPE expression1 .
+    8 expression1: expression1 . COMMA expression
+
+    COMMA  shift, and go to state 12
+
+    $default  reduce using rule 5 (declaration)
+
+
+state 10
+
+    9 expression1: expression .
+
+    $default  reduce using rule 9 (expression1)
+
+
+state 11
+
+   10 expression: VAR ASSIGN . INTVAL
+
+    INTVAL  shift, and go to state 13
+
+
+state 12
+
+    8 expression1: expression1 COMMA . expression
+
+    VAR  shift, and go to state 8
+
+    expression  go to state 14
+
+
+state 13
+
+   10 expression: VAR ASSIGN INTVAL .
+
+    $default  reduce using rule 10 (expression)
+
+
+state 14
+
+    8 expression1: expression1 COMMA expression .
+
+    $default  reduce using rule 8 (expression1)
