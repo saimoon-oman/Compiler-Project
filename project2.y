@@ -15,7 +15,7 @@
   }value;
   value symbol_table[200];
 
-  int index=0, if_check=0;
+  int index=0, if_check=0, sw = 0, check = 0;
   int find_symbol_table_index(char *var);
   void assignment(char *name, int ival, float fval, char *type);
 %}
@@ -57,6 +57,8 @@ statement:
           | function
           | function_call
           | ret
+          | switch
+          | case
           ;
 
 library:
@@ -93,6 +95,47 @@ function_call:
 declaration:
             TYPE expression1
             ;
+
+switch:
+    SWITCH LBRA assignval RBRA {
+        sw = $3.ival;
+        check = 0;
+        printf("switch statement.\n");
+    }
+    ;
+
+case:
+    cases
+    {
+        if(check == 0)
+        {
+            printf("default\n");
+        }
+    }
+    ;
+
+cases: 
+    CASE assignval COLON LBRA statement RBRA cases{
+        if(sw==$2.ival)
+        {
+            printf("%d\n",$2.ival);
+            check = 1;
+        }
+
+    }
+    |CASE assignval COLON LBRA statement RBRA default_function {
+        
+        if(sw==$2.ival)
+        {
+            printf("%d\n",$2.ival);
+            check = 1;
+        }
+    }
+    ;
+default_function:
+    DEFAULT LBRA statement RBRA {
+    }
+    ;
 
 TYPE :
      INT
@@ -358,6 +401,7 @@ for:
       }
     }
     ;
+
 %%
 
 

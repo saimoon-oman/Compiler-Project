@@ -1,9 +1,15 @@
 #ImporT>ALL_LIBRARY.h< is detected.
 Function declared
+User defined function.
+Function declared
 16
 2
 0.85
-3
+switch statement.
+1\n
+2\n
+default\n
+2
 15
 Inside if statement
 Inside else
@@ -15,5 +21,5 @@ This is a for loop.
 Hello World
 Return 0 from function
 Main function.
+int abc : 10
 int num1 : 2
-int num2 : 2
