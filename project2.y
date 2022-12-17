@@ -35,7 +35,7 @@
     char *type;
   }uni_var;
 }
-%type<uni_var> VAR INTVAL REALVAL assignval
+%type<uni_var> VAR INTVAL REALVAL assignval expression
 
 %%	  	
 program: 
@@ -45,6 +45,7 @@ program:
 statement: 
           declaration
           | expression1
+          | print
           ;
 
 declaration:
@@ -78,30 +79,20 @@ assignval:
             }
             if (i == index) printf("NOT FOUND\n");
           }
-          | assignval PLUS assignval     { $$.ival = $1.ival + $3.ival, $$.fval = $1.fval + $3.fval; }
-          | assignval MINUS assignval     { $$.ival = $1.ival - $3.ival, $$.fval = $1.fval - $3.fval; }
-          | assignval MUL assignval     { $$.ival = $1.ival * $3.ival, $$.fval = $1.fval * $3.fval; }
-          | assignval DIV assignval     { $$.ival = $1.ival / $3.ival, $$.fval = $1.fval / $3.fval; }
-          | assignval POW assignval     { $$.ival = pow($1.ival, $3.ival); }
-          | '(' assignval ')'            { $$.ival = $2.ival; $$.ival }
+          | assignval PLUS assignval     { $$.ival = $1.ival + $3.ival, $$.fval = $1.fval + $3.fval, $$.type = $1.type; }
+          | assignval MINUS assignval     { $$.ival = $1.ival - $3.ival, $$.fval = $1.fval - $3.fval, $$.type = $1.type; }
+          | assignval MUL assignval     { $$.ival = $1.ival * $3.ival, $$.fval = $1.fval * $3.fval, $$.type = $1.type; }
+          | assignval DIV assignval     { $$.ival = $1.ival / $3.ival, $$.fval = $1.fval / $3.fval, $$.type = $1.type; }
+          | assignval POW assignval     { $$.ival = pow($1.ival, $3.ival), $$.fval = $1.fval, $$.type = $1.type; }
+          | LBRA assignval RBRA           { $$.ival = $2.ival, $$.fval = $2.fval, $$.type = $2.type;}
           ;
 
-exp:
-    INTEGER
-
-        | VARIABLE                      { $$ = sym[$1]; }
-
-        | expression '+' expression     { $$ = $1 + $3; }
-
-        | expression '-' expression     { $$ = $1 - $3; }
-
-        | expression '*' expression     { $$ = $1 * $3; }
-
-        | expression '/' expression     { $$ = $1 / $3; }
-
-        | '(' expression ')'            { $$ = $2; }
-
-        ;
+print:
+      OUT LBRA assignval RBRA {
+        if (strcmp($3.type, "int") == 0) printf("%d\n", $3.ival);
+        else if (strcmp($3.type, "float") == 0) printf("%.2lf\n", $3.fval);
+      }
+      ;
 
 %%
 
@@ -135,7 +126,9 @@ void assignment(char *name, int ival, float fval, char *type)
 }
 
 int main(void)
-{    
+{   
   yyparse();
   printf("%s %s : %d\n",symbol_table[0].data_type, symbol_table[0].name, symbol_table[0].ival);
+  printf("%s %s : %d\n",symbol_table[1].data_type, symbol_table[1].name, symbol_table[1].ival);
+  
 }

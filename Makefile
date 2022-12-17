@@ -2,5 +2,5 @@ make:
 		bison -d project2.y
 		flex project2.l
 		gcc lex.yy.c project2.tab.c
-		a
+		a <input2.txt> output2.txt
 		

@@ -99,7 +99,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 29 "project2.y"
+#line 30 "project2.y"
 
   struct abc {
     int ival;
