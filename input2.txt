@@ -8,9 +8,10 @@
   ->OuT<-((num1))
   ->OuT<-((num2))
   ->OuT<-((num3))
-  >IntegeR< a := 2 ,, b := 3
+  >IntegeR< a := 5 ,, b := 3
   num1 DecremenT1
-  >IntegeR< x := 
+  >IntegeR< x := min(( a ,, b ))
+  ->OuT<-((x))
   ->OuT<-((num1))
   ->IF<- (( num1 > num2 )) {{
     ->OuT<-((??Inside if statement??))

@@ -89,7 +89,8 @@
      BITWISEAND = 305,
      BITWISEXOR = 306,
      BITWISEOR = 307,
-     LIB = 308
+     LIB = 308,
+     MIN = 309
    };
 #endif
 
@@ -100,7 +101,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 30 "project2.y"
+#line 31 "project2.y"
 
   struct abc {
     int ival;
@@ -112,7 +113,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 116 "project2.tab.h"
+#line 117 "project2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -1,5 +1,6 @@
 %{
   #include<stdio.h>
+  #include<stdlib.h>
   #include<string.h>
   #include<math.h>
   void yyerror(char *s);
@@ -145,20 +146,23 @@ assignval:
               int i = find_symbol_table_index("min");
               symbol_table[i].name = "min";
               symbol_table[i].data_type = "int";
-              symbol_table[i].ival = min($3.ival, $5.ival);
-              symbol_table[i].fval = min($3.fval, $5.fval);
+              symbol_table[i].ival = $3.ival < $5.ival ? $3.ival : $5.ival;
+              symbol_table[i].fval = $3.fval < $5.fval ? $3.fval : $5.fval;
               if (i == index) index++;
               $$.ival = symbol_table[i].ival;
               $$.fval = symbol_table[i].fval;
-              $$.type = symbol_table[i].type;
+              $$.type = symbol_table[i].data_type;
             }
             else if (strcmp($3.type, "float") == 0) {
               int i = find_symbol_table_index("min");
               symbol_table[i].name = "min";
               symbol_table[i].data_type = "float";
-              symbol_table[i].ival = min($3.ival, $5.ival);
-              symbol_table[i].fval = min($3.fval, $5.fval);
+              symbol_table[i].ival = $3.ival < $5.ival ? $3.ival : $5.ival;
+              symbol_table[i].fval = $3.fval < $5.fval ? $3.fval : $5.fval;
               if (i == index) index++;
+              $$.ival = symbol_table[i].ival;
+              $$.fval = symbol_table[i].fval;
+              $$.type = symbol_table[i].data_type;
             }
           }
           | assignval LOGICALOR assignval {
