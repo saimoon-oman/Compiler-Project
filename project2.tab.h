@@ -84,13 +84,16 @@
      INTVAL = 300,
      REALVAL = 301,
      VAR = 302,
-     OUTPUTTEXT = 303,
-     NOTEQUAL = 304,
-     BITWISEAND = 305,
-     BITWISEXOR = 306,
-     BITWISEOR = 307,
-     LIB = 308,
-     MIN = 309
+     MIN = 303,
+     MAX = 304,
+     OUTPUTTEXT = 305,
+     NOTEQUAL = 306,
+     BITWISEAND = 307,
+     BITWISEXOR = 308,
+     BITWISEOR = 309,
+     LIB = 310,
+     GCD = 311,
+     LCM = 312
    };
 #endif
 
@@ -101,7 +104,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 31 "project2.y"
+#line 32 "project2.y"
 
   struct abc {
     int ival;
@@ -113,7 +116,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 117 "project2.tab.h"
+#line 120 "project2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
