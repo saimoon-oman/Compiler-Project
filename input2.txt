@@ -1,25 +1,34 @@
->IntegeR< num1 := 2 ,, num2 := 2 ,, num5 := 2
-num1 := ((num1 + num2)) ** num5
->FloaT< num3 := 5.5 ,, num4 := 6.5
-num3 := num3 / num4
-->OuT<-((num1))
-->OuT<-((num2))
-->OuT<-((num3))
->IntegeR< a := 2 ,, b := 3
-num1 DecremenT1
-->OuT<-((num1))
-->IF<- (( num1 > num2 )) {{
-  ->OuT<-((??Inside if statement??))
+#ImporT>ALL_LIBRARY.h<
+
+>IntegeR< main(()) {{
+  >IntegeR< num1 := 2 ,, num2 := 2 ,, num5 := 2
+  num1 := ((num1 + num2)) ** num5
+  >FloaT< num3 := 5.5 ,, num4 := 6.5
+  num3 := num3 / num4
+  ->OuT<-((num1))
+  ->OuT<-((num2))
+  ->OuT<-((num3))
+  >IntegeR< a := 2 ,, b := 3
+  num1 DecremenT1
+  >IntegeR< x := 
+  ->OuT<-((num1))
+  ->IF<- (( num1 > num2 )) {{
+    ->OuT<-((??Inside if statement??))
+  }}
+  ->ElsE<- {{
+    ->OuT<-((??Inside else??))
+  }}
+  ->WhilE<- (( num1 > num2 )) {{
+    ->OuT<-((??Inside while??))
+  }}
+  ->FoR<- (( num1 := 1 :: num1 <= 5 :: num1 IncremenT1)) {{
+    ->OuT<-((??Inside for??))
+  }}
+  ->->-> single line comment
+  ->-> multi
+  line
+  comment
+  <-<-
+  ->OuT<-((??Hello World??))
+  >BacK< 0
 }}
-->ElsE<- {{
-  ->OuT<-((??Inside else??))
-}}
-->WhilE<- (( num1 > num2 )) {{
-  ->OuT<-((??Inside while??))
-}}
-->->-> single line comment
-->-> multi
-line
-comment
-<-<-
-->OuT<-((??Hello World??))

@@ -20,13 +20,13 @@ LOOP_INC_DEC [ ]*{VARIABLE}[ ]{INC_DEC}[ ]*
 BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 %%
+"#ImporT>".+".h<" {
+  yylval.uni_var.str = strdup(yytext);
+  return LIB;}
+
 ">IntegeR<"   {return INT;}
 
 ">FloaT<"     {return FLOAT;}
-
-">CharacteR<" {return CHAR;}
-
-">VoiD<" {return VOID;}
 
 "+" {return PLUS;}
 
@@ -88,14 +88,6 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 "->IN<-" {return IN;}
 
-">ContinuE<" {return CONTINUE;}
-
-">BreaK<" {return BREAK;}
-
-">StrucT<" {return STRUCT;}
-
-"->SizeoF<-" {return SIZEOF;}
-
 "->->".* {}
 
 "->->->"({whitesp}|[\n]|.)*"<-<-" {}
@@ -111,13 +103,13 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 "->IF<-" {return IF;}
 
-"->EliF<-" {return ELSEIF;}
-
 "->ElsE<-" {return ELSE;}
 
 "IncremenT1" {return INCREMENT;}
 
 "DecremenT1" {return DECREMENT;}
+
+"min" {return MIN;}
 
 "->SwitcH<-" {return SWITCH;}
 

@@ -26,7 +26,7 @@
 %token LBRA RBRA SEMICOLON COMMA COLON FOR WHILE BACK OUT IN 
 %token CONTINUE BREAK STRUCT SIZEOF IF ELSEIF ELSE INCREMENT
 %token DECREMENT SWITCH CASE DEFAULT INTVAL REALVAL VAR
-%token OUTPUTTEXT NOTEQUAL BITWISEAND BITWISEXOR BITWISEOR
+%token OUTPUTTEXT NOTEQUAL BITWISEAND BITWISEXOR BITWISEOR LIB MIN
 %union {
   struct abc {
     int ival;
@@ -35,7 +35,7 @@
     char *type;
   }uni_var;
 }
-%type<uni_var> VAR INTVAL REALVAL assignval block statement expression OUTPUTTEXT
+%type<uni_var> VAR LIB INTVAL REALVAL assignval block statement expression OUTPUTTEXT
 %left PLUS MINUS
 %left MUL DIV MOD
 %left POW
@@ -52,7 +52,42 @@ statement:
           | if
           | while
           | for
+          | library
+          | function
+          | function_call
+          | ret
           ;
+
+library:
+    LIB {printf("%s is detected.\n", $1.str);}
+    ;
+
+function:
+    TYPE VAR LBRA params RBRA LPAR block {
+      if(strcmp($2.str, "main") == 0)
+      {
+          printf("Main function.\n");
+      }
+      else
+      {
+          printf("User defined function.\n");
+      }
+    }
+    ;
+
+params:
+    params COMMA declaration_for_function
+    |declaration_for_function {printf("Function declared\n");}
+    ;
+
+declaration_for_function: 
+                    |TYPE expression
+    ;
+
+function_call:
+    VAR LBRA expression1 RBRA 
+    |VAR LBRA RBRA
+    ;
 
 declaration:
             TYPE expression1
@@ -87,6 +122,11 @@ expression:
           | VAR {assignment($1.str, 0, 0.0, "int");}
           ;
 
+ret:
+    BACK
+    | BACK assignval {printf("Return %d from function\n", $2.ival);}
+    ;
+
 assignval:
           INTVAL {$$.ival = $1.ival, $$.fval = $1.fval, $$.type = $1.type;}
           | REALVAL {$$.ival = $1.ival, $$.fval = $1.fval, $$.type = $1.type;}
@@ -99,6 +139,27 @@ assignval:
               }
             }
             // if (i == index) printf("NOT FOUND\n");
+          }
+          | MIN LBRA VAR COMMA VAR RBRA {
+            if (strcmp($3.type, "int") == 0) {
+              int i = find_symbol_table_index("min");
+              symbol_table[i].name = "min";
+              symbol_table[i].data_type = "int";
+              symbol_table[i].ival = min($3.ival, $5.ival);
+              symbol_table[i].fval = min($3.fval, $5.fval);
+              if (i == index) index++;
+              $$.ival = symbol_table[i].ival;
+              $$.fval = symbol_table[i].fval;
+              $$.type = symbol_table[i].type;
+            }
+            else if (strcmp($3.type, "float") == 0) {
+              int i = find_symbol_table_index("min");
+              symbol_table[i].name = "min";
+              symbol_table[i].data_type = "float";
+              symbol_table[i].ival = min($3.ival, $5.ival);
+              symbol_table[i].fval = min($3.fval, $5.fval);
+              if (i == index) index++;
+            }
           }
           | assignval LOGICALOR assignval {
             if (strcmp($1.type, "int")==0) {
@@ -279,7 +340,7 @@ else:
 
 while:
     WHILE LBRA assignval RBRA LPAR block {
-      while($3.ival)
+      if($3.ival)
       {
           printf("Inside while loop\n");
       }
@@ -288,9 +349,8 @@ while:
 
 for:
     FOR LBRA expression COLON assignval COLON expression RBRA LPAR block{
-      for(int i=$3.ival;i<$5.ival;i=i+$7.ival)
-      {
-          printf("This is a for loop.\n");
+      if ($5.ival) {
+        printf("This is a for loop.\n");
       }
     }
     ;

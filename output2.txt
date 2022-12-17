@@ -1,3 +1,5 @@
+#ImporT>ALL_LIBRARY.h< is detected.
+Function declared
 16
 2
 0.85
@@ -7,6 +9,10 @@ Inside else
 If statement will be executed.
 Inside while
 Inside while loop
+Inside for
+This is a for loop.
 Hello World
-int num1 : 15
+Return 0 from function
+Main function.
+int num1 : 2
 int num2 : 2

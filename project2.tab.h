@@ -88,7 +88,8 @@
      NOTEQUAL = 304,
      BITWISEAND = 305,
      BITWISEXOR = 306,
-     BITWISEOR = 307
+     BITWISEOR = 307,
+     LIB = 308
    };
 #endif
 
@@ -111,7 +112,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 115 "project2.tab.h"
+#line 116 "project2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
