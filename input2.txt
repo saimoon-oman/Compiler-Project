@@ -1,3 +1,14 @@
->IntegeR< num1 := 10 ,, num2 := 20
-num1 := num1 + num2
+>IntegeR< num1 := 2 ,, num2 := 5 ,, num5 := 2
+num1 := ((num1 + num2)) ** num5
+>FloaT< num3 := 5.5 ,, num4 := 6.5
+num3 := num3 / num4
 ->OuT<-((num1))
+->OuT<-((num2))
+->OuT<-((num3))
+->OuT<-((num1%num2))
+->->-> single line comment
+->-> multi
+line
+comment
+<-<-
+->OuT<-((??Hello World??))

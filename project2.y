@@ -26,7 +26,7 @@
 %token LBRA RBRA SEMICOLON COMMA COLON FOR WHILE BACK OUT IN 
 %token CONTINUE BREAK STRUCT SIZEOF IF ELSEIF ELSE INCREMENT
 %token DECREMENT AND OR NOT XOR SWITCH CASE DEFAULT INTVAL REALVAL VAR
-
+%token OUTPUTTEXT
 %union {
   struct abc {
     int ival;
@@ -35,8 +35,10 @@
     char *type;
   }uni_var;
 }
-%type<uni_var> VAR INTVAL REALVAL assignval expression
-
+%type<uni_var> VAR INTVAL REALVAL assignval expression OUTPUTTEXT
+%left PLUS MINUS
+%left MUL DIV MOD
+%left POW
 %%	  	
 program: 
        |program statement  
@@ -46,6 +48,7 @@ statement:
           declaration
           | expression1
           | print
+          | in
           ;
 
 declaration:
@@ -64,6 +67,7 @@ expression1 :
 
 expression:
           VAR ASSIGN assignval {assignment($1.str, $3.ival, $3.fval, $3.type);}
+          | VAR {assignment($1.str, 0, 0.0, "int");}
           ;
 
 assignval:
@@ -77,12 +81,17 @@ assignval:
                 break;
               }
             }
-            if (i == index) printf("NOT FOUND\n");
+            // if (i == index) printf("NOT FOUND\n");
           }
           | assignval PLUS assignval     { $$.ival = $1.ival + $3.ival, $$.fval = $1.fval + $3.fval, $$.type = $1.type; }
           | assignval MINUS assignval     { $$.ival = $1.ival - $3.ival, $$.fval = $1.fval - $3.fval, $$.type = $1.type; }
           | assignval MUL assignval     { $$.ival = $1.ival * $3.ival, $$.fval = $1.fval * $3.fval, $$.type = $1.type; }
-          | assignval DIV assignval     { $$.ival = $1.ival / $3.ival, $$.fval = $1.fval / $3.fval, $$.type = $1.type; }
+          | assignval DIV assignval     { 
+            if (strcmp($1.type, "int") == 0 && $3.ival != 0) $$.ival = $1.ival / $3.ival;
+            else if (strcmp($1.type, "float") == 0 && $3.fval != 0.0) $$.fval = $1.fval / $3.fval;
+            $$.type = $1.type;
+          }
+          | assignval MOD assignval {$$.ival = $1.ival % $3.ival, $$.fval = $1.fval, $$.type = $1.type;}
           | assignval POW assignval     { $$.ival = pow($1.ival, $3.ival), $$.fval = $1.fval, $$.type = $1.type; }
           | LBRA assignval RBRA           { $$.ival = $2.ival, $$.fval = $2.fval, $$.type = $2.type;}
           ;
@@ -92,7 +101,28 @@ print:
         if (strcmp($3.type, "int") == 0) printf("%d\n", $3.ival);
         else if (strcmp($3.type, "float") == 0) printf("%.2lf\n", $3.fval);
       }
+      | OUT LBRA OUTPUTTEXT RBRA {
+        printf("%s\n", $3.str);
+      }
       ;
+
+in:
+    IN LBRA VAR RBRA {
+      int i = find_symbol_table_index($3.str);
+      if (i != index) {
+        printf("Enter value for %s := ", symbol_table[i].name);
+        if (strcmp(symbol_table[i].data_type, "int") == 0) {
+          scanf("%d", &symbol_table[i].ival);
+        }
+        else if (strcmp(symbol_table[i].data_type, "float") == 0) {
+          scanf("%f", &symbol_table[i].fval);
+        }
+      }
+      else {
+        printf("Variable not declared\n");
+      }
+    }
+    ;
 
 %%
 
@@ -110,7 +140,7 @@ int find_symbol_table_index(char *var)
 {
   int i;
   for (i = 0; i < index; i++) {
-    if (strcmp(symbol_table[i].name, var) == 0) return 0;
+    if (strcmp(symbol_table[i].name, var) == 0) return i;
   }
   return index;
 }

@@ -92,6 +92,17 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 "->->".* {}
 
+"->->->"({whitesp}|[\n]|.)*"<-<-" {}
+
+"??"({whitesp}|.)*"??" {
+  yytext++;
+  yytext++;
+  int l=strlen(yytext);
+  yylval.uni_var.str=yytext;
+  yylval.uni_var.str[l-2]='\0';
+  return OUTPUTTEXT;
+}
+
 "->IF<-" {return IF;}
 
 "->EliF<-" {return ELSEIF;}

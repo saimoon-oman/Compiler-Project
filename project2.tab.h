@@ -88,7 +88,8 @@
      DEFAULT = 304,
      INTVAL = 305,
      REALVAL = 306,
-     VAR = 307
+     VAR = 307,
+     OUTPUTTEXT = 308
    };
 #endif
 
@@ -111,7 +112,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 115 "project2.tab.h"
+#line 116 "project2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
