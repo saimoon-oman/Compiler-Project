@@ -1,7 +1,7 @@
-49
-5
+16
+2
 0.85
-4
+15
 Hello World
-int num1 : 49
-int num2 : 5
+int num1 : 15
+int num2 : 2

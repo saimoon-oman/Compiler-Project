@@ -22,11 +22,11 @@
 
 %start program
 %token INT FLOAT CHAR VOID PLUS MINUS MUL DIV MOD POW GT LT GTE
-%token LTE EQUAL LOGICALAND LOGICALOR LOGICALNOT ASSIGN LPAR RPAR
+%token LTE EQUAL LOGICALAND LOGICALOR ASSIGN LPAR RPAR
 %token LBRA RBRA SEMICOLON COMMA COLON FOR WHILE BACK OUT IN 
 %token CONTINUE BREAK STRUCT SIZEOF IF ELSEIF ELSE INCREMENT
-%token DECREMENT AND OR NOT XOR SWITCH CASE DEFAULT INTVAL REALVAL VAR
-%token OUTPUTTEXT
+%token DECREMENT SWITCH CASE DEFAULT INTVAL REALVAL VAR
+%token OUTPUTTEXT NOTEQUAL BITWISEAND BITWISEXOR BITWISEOR
 %union {
   struct abc {
     int ival;
@@ -67,6 +67,20 @@ expression1 :
 
 expression:
           VAR ASSIGN assignval {assignment($1.str, $3.ival, $3.fval, $3.type);}
+          | VAR INCREMENT {
+            int i = find_symbol_table_index($1.str);
+            if (i != index) {
+              symbol_table[i].ival = symbol_table[i].ival + 1;
+              symbol_table[i].fval = symbol_table[i].fval + 1.0;
+            }
+          }
+          | VAR DECREMENT {
+            int i = find_symbol_table_index($1.str);
+            if (i != index) {
+              symbol_table[i].ival = symbol_table[i].ival - 1;
+              symbol_table[i].fval = symbol_table[i].fval - 1.0;
+            }
+          }
           | VAR {assignment($1.str, 0, 0.0, "int");}
           ;
 
@@ -82,6 +96,114 @@ assignval:
               }
             }
             // if (i == index) printf("NOT FOUND\n");
+          }
+          | assignval LOGICALOR assignval {
+            if (strcmp($1.type, "int")==0) {
+              $$.ival = ($1.ival || $3.ival);
+              $$.fval = $1.fval, $$.type = $1.type;
+            }
+          }
+          | assignval LOGICALAND assignval {
+            if (strcmp($1.type, "int")==0) {
+              $$.ival = ($1.ival && $3.ival);
+              $$.fval = $1.fval, $$.type = $1.type;
+            }
+          }
+          | assignval BITWISEXOR assignval {
+            if (strcmp($1.type, "int")==0) {
+              $$.ival = $1.ival ^ $3.ival;
+              $$.fval = $1.fval, $$.type = $1.type;
+            }
+          }
+          | assignval BITWISEAND assignval {
+            if (strcmp($1.type, "int")==0) {
+              $$.ival = $1.ival & $3.ival;
+              $$.fval = $1.fval, $$.type = $1.type;
+            }
+          }
+          | assignval BITWISEXOR assignval {
+            if (strcmp($1.type, "int")==0) {
+              $$.ival = $1.ival ^ $3.ival;
+              $$.fval = $1.fval, $$.type = $1.type;
+            }
+          }
+          | assignval BITWISEOR assignval {
+            if (strcmp($1.type, "int")==0) {
+              $$.ival = $1.ival | $3.ival;
+              $$.fval = $1.fval, $$.type = $1.type;
+            }
+          }
+          | assignval EQUAL assignval {
+            if (strcmp($1.type, "int")==0) {
+              if ($1.ival == $3.ival) $$.ival = 1, $$.fval = 1.0;
+              else $$.ival = 0, $$.fval = 0.0;
+              $$.type = $1.type;
+            }
+            else if (strcmp($1.type, "float") == 0) {
+              if ($1.fval == $3.fval) $$.fval = 1.0, $$.ival = 1;
+              else $$.fval = 0.0, $$.ival = 0;
+              $$.type = $1.type;
+            }
+          }
+          | assignval NOTEQUAL assignval {
+            if (strcmp($1.type, "int")==0) {
+              if ($1.ival != $3.ival) $$.ival = 1, $$.fval = 1.0;
+              else $$.ival = 0, $$.fval = 0.0;
+              $$.type = $1.type;
+            }
+            else if (strcmp($1.type, "float") == 0) {
+              if ($1.fval != $3.fval) $$.fval = 1.0, $$.ival = 1;
+              else $$.fval = 0.0, $$.ival = 0;
+              $$.type = $1.type;
+            }
+          }
+          | assignval LT assignval {
+            if (strcmp($1.type, "int")==0) {
+              if ($1.ival < $3.ival) $$.ival = 1, $$.fval = 1.0;
+              else $$.ival = 0, $$.fval = 0.0;
+              $$.type = $1.type;
+            }
+            else if (strcmp($1.type, "float") == 0) {
+              if ($1.fval < $3.fval) $$.fval = 1.0, $$.ival = 1;
+              else $$.fval = 0.0, $$.ival = 0;
+              $$.type = $1.type;
+            }
+          }
+          | assignval LTE assignval {
+            if (strcmp($1.type, "int")==0) {
+              if ($1.ival <= $3.ival) $$.ival = 1, $$.fval = 1.0;
+              else $$.ival = 0, $$.fval = 0.0;
+              $$.type = $1.type;
+            }
+            else if (strcmp($1.type, "float") == 0) {
+              if ($1.fval <= $3.fval) $$.fval = 1.0, $$.ival = 1;
+              else $$.fval = 0.0, $$.ival = 0;
+              $$.type = $1.type;
+            }
+          }
+          | assignval GT assignval {
+            if (strcmp($1.type, "int")==0) {
+              if ($1.ival > $3.ival) $$.ival = 1, $$.fval = 1.0;
+              else $$.ival = 0, $$.fval = 0.0;
+              $$.type = $1.type;
+            }
+            else if (strcmp($1.type, "float") == 0) {
+              if ($1.fval > $3.fval) $$.fval = 1.0, $$.ival = 1;
+              else $$.fval = 0.0, $$.ival = 0;
+              $$.type = $1.type;
+            }
+          }
+          | assignval GTE assignval {
+            if (strcmp($1.type, "int")==0) {
+              if ($1.ival >= $3.ival) $$.ival = 1, $$.fval = 1.0;
+              else $$.ival = 0, $$.fval = 0.0;
+              $$.type = $1.type;
+            }
+            else if (strcmp($1.type, "float") == 0) {
+              if ($1.fval >= $3.fval) $$.fval = 1.0, $$.ival = 1;
+              else $$.fval = 0.0, $$.ival = 0;
+              $$.type = $1.type;
+            }
           }
           | assignval PLUS assignval     { $$.ival = $1.ival + $3.ival, $$.fval = $1.fval + $3.fval, $$.type = $1.type; }
           | assignval MINUS assignval     { $$.ival = $1.ival - $3.ival, $$.fval = $1.fval - $3.fval, $$.type = $1.type; }

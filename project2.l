@@ -50,11 +50,17 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 "EquaL" {return EQUAL;}
 
+"!EquaL!" {return NOTEQUAL;}
+
+"&&" {return BITWISEAND;}
+
+"^^" {return BITWISEXOR;}
+
+"||" {return BITWISEOR;}
+
 "&AnD" {return LOGICALAND;}
 
 "|OR" {return LOGICALOR;}
-
-"!NoT" {return LOGICALNOT;}
 
 ":=" {return ASSIGN;}
 
@@ -112,14 +118,6 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 "IncremenT1" {return INCREMENT;}
 
 "DecremenT1" {return DECREMENT;}
-
-"AnD" {return AND;}
-
-"OR" {return OR;}
-
-"NoT" {return NOT;}
-
-"XoR" {return XOR;}
 
 "->SwitcH<-" {return SWITCH;}
 

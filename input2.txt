@@ -1,11 +1,13 @@
->IntegeR< num1 := 2 ,, num2 := 5 ,, num5 := 2
+>IntegeR< num1 := 2 ,, num2 := 2 ,, num5 := 2
 num1 := ((num1 + num2)) ** num5
 >FloaT< num3 := 5.5 ,, num4 := 6.5
 num3 := num3 / num4
 ->OuT<-((num1))
 ->OuT<-((num2))
 ->OuT<-((num3))
-->OuT<-((num1%num2))
+>IntegeR< a := 2 ,, b := 3
+num1 DecremenT1
+->OuT<-((num1))
 ->->-> single line comment
 ->-> multi
 line
