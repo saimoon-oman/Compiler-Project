@@ -8,6 +8,15 @@ num3 := num3 / num4
 >IntegeR< a := 2 ,, b := 3
 num1 DecremenT1
 ->OuT<-((num1))
+->IF<- (( num1 > num2 )) {{
+  ->OuT<-((??Inside if statement??))
+}}
+->ElsE<- {{
+  ->OuT<-((??Inside else??))
+}}
+->WhilE<- (( num1 > num2 )) {{
+  ->OuT<-((??Inside while??))
+}}
 ->->-> single line comment
 ->-> multi
 line

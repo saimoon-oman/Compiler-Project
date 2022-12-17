@@ -2,6 +2,11 @@
 2
 0.85
 15
+Inside if statement
+Inside else
+If statement will be executed.
+Inside while
+Inside while loop
 Hello World
 int num1 : 15
 int num2 : 2

@@ -14,7 +14,7 @@
   }value;
   value symbol_table[200];
 
-  int index=0;
+  int index=0, if_check=0;
   int find_symbol_table_index(char *var);
   void assignment(char *name, int ival, float fval, char *type);
 %}
@@ -35,7 +35,7 @@
     char *type;
   }uni_var;
 }
-%type<uni_var> VAR INTVAL REALVAL assignval expression OUTPUTTEXT
+%type<uni_var> VAR INTVAL REALVAL assignval block statement expression OUTPUTTEXT
 %left PLUS MINUS
 %left MUL DIV MOD
 %left POW
@@ -49,6 +49,9 @@ statement:
           | expression1
           | print
           | in
+          | if
+          | while
+          | for
           ;
 
 declaration:
@@ -66,7 +69,7 @@ expression1 :
             ; 
 
 expression:
-          VAR ASSIGN assignval {assignment($1.str, $3.ival, $3.fval, $3.type);}
+          VAR ASSIGN assignval {assignment($1.str, $3.ival, $3.fval, $3.type); $$.str = $1.str; $$.ival = $3.ival; $$.fval = $3.fval; $$.type = $3.type}
           | VAR INCREMENT {
             int i = find_symbol_table_index($1.str);
             if (i != index) {
@@ -118,12 +121,6 @@ assignval:
           | assignval BITWISEAND assignval {
             if (strcmp($1.type, "int")==0) {
               $$.ival = $1.ival & $3.ival;
-              $$.fval = $1.fval, $$.type = $1.type;
-            }
-          }
-          | assignval BITWISEXOR assignval {
-            if (strcmp($1.type, "int")==0) {
-              $$.ival = $1.ival ^ $3.ival;
               $$.fval = $1.fval, $$.type = $1.type;
             }
           }
@@ -246,6 +243,57 @@ in:
     }
     ;
 
+block:
+    statement block
+    |statement RPAR {$$.ival=$1.ival;}
+    ;
+
+if:
+    IF LBRA assignval RBRA LPAR block {
+      if($3.ival)
+      {
+          if_check=1;
+          printf("If statement will be executed.\n");
+      }
+      if(if_check!=1)
+      {
+          printf("Else statement will be executed.\n");
+      }
+    }
+    | IF LBRA assignval RBRA LPAR block else {
+      if($3.ival)
+      {  
+          if_check=1;
+          printf("If statement will be executed.\n");
+      }
+      if(if_check!=1)
+      {
+          printf("Else statement will be executed.\n");
+      }
+    }
+    ;
+
+else:
+    ELSE LPAR block {}
+    ;
+
+while:
+    WHILE LBRA assignval RBRA LPAR block {
+      while($3.ival)
+      {
+          printf("Inside while loop\n");
+      }
+    }
+    ;
+
+for:
+    FOR LBRA expression COLON assignval COLON expression RBRA LPAR block{
+      for(int i=$3.ival;i<$5.ival;i=i+$7.ival)
+      {
+          printf("This is a for loop.\n");
+      }
+    }
+    ;
 %%
 
 
