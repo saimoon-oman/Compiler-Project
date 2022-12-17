@@ -99,18 +99,19 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 25 "project2.y"
+#line 29 "project2.y"
 
   struct abc {
     int ival;
     float fval;
     char *str;
+    char *type;
   }uni_var;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 114 "project2.tab.h"
+#line 115 "project2.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

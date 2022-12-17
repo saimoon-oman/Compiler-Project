@@ -118,11 +118,15 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
 
 {INT_NUMBER} {
   yylval.uni_var.ival = atoi(yytext);
+  yylval.uni_var.fval = 0.0;
+  yylval.uni_var.type = "int";
   return INTVAL;
 }
 
 {REAL_NUMBER} {
   yylval.uni_var.fval = atof(yytext);
+  yylval.uni_var.ival = 0;
+  yylval.uni_var.type = "float";
   return REALVAL;
 }
 
@@ -131,6 +135,12 @@ BITWISE_OPERATOR "AnD"|"OR"|"XoR"
   return VAR;
 }
 
+[?][a-zA-Z][?] {
+  printf("matched");
+}
+
 {whitesp}	{ /* No action and no return */}
+
+[\n] {}
 
 %%

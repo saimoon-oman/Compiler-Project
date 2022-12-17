@@ -1,5 +1,7 @@
 %{
   #include<stdio.h>
+  #include<string.h>
+  #include<math.h>
   void yyerror(char *s);
   extern int yylex();
   extern int yyparse();
@@ -13,6 +15,8 @@
   value symbol_table[200];
 
   int index=0;
+  int find_symbol_table_index(char *var);
+  void assignment(char *name, int ival, float fval, char *type);
 %}
 
 
@@ -22,14 +26,16 @@
 %token LBRA RBRA SEMICOLON COMMA COLON FOR WHILE BACK OUT IN 
 %token CONTINUE BREAK STRUCT SIZEOF IF ELSEIF ELSE INCREMENT
 %token DECREMENT AND OR NOT XOR SWITCH CASE DEFAULT INTVAL REALVAL VAR
+
 %union {
   struct abc {
     int ival;
     float fval;
     char *str;
+    char *type;
   }uni_var;
 }
-%type<uni_var> VAR INTVAL
+%type<uni_var> VAR INTVAL REALVAL assignval
 
 %%	  	
 program: 
@@ -37,7 +43,8 @@ program:
        ;			   
 
 statement: 
-          |declaration
+          declaration
+          | expression1
           ;
 
 declaration:
@@ -55,13 +62,46 @@ expression1 :
             ; 
 
 expression:
-          VAR ASSIGN INTVAL {
-            symbol_table[index].data_type = "int";
-            symbol_table[index].name = $1.str;
-            symbol_table[index].ival = $3.ival;
-            index++;
-          }
+          VAR ASSIGN assignval {assignment($1.str, $3.ival, $3.fval, $3.type);}
           ;
+
+assignval:
+          INTVAL {$$.ival = $1.ival, $$.fval = $1.fval, $$.type = $1.type;}
+          | REALVAL {$$.ival = $1.ival, $$.fval = $1.fval, $$.type = $1.type;}
+          | VAR {
+            int i = 0;
+            for (i = 0; i < index; i++) {
+              if (strcmp($1.str, symbol_table[i].name) == 0) {
+                $$.ival = symbol_table[i].ival, $$.fval = symbol_table[i].fval, $$.type = symbol_table[i].data_type;
+                break;
+              }
+            }
+            if (i == index) printf("NOT FOUND\n");
+          }
+          | assignval PLUS assignval     { $$.ival = $1.ival + $3.ival, $$.fval = $1.fval + $3.fval; }
+          | assignval MINUS assignval     { $$.ival = $1.ival - $3.ival, $$.fval = $1.fval - $3.fval; }
+          | assignval MUL assignval     { $$.ival = $1.ival * $3.ival, $$.fval = $1.fval * $3.fval; }
+          | assignval DIV assignval     { $$.ival = $1.ival / $3.ival, $$.fval = $1.fval / $3.fval; }
+          | assignval POW assignval     { $$.ival = pow($1.ival, $3.ival); }
+          | '(' assignval ')'            { $$.ival = $2.ival; $$.ival }
+          ;
+
+exp:
+    INTEGER
+
+        | VARIABLE                      { $$ = sym[$1]; }
+
+        | expression '+' expression     { $$ = $1 + $3; }
+
+        | expression '-' expression     { $$ = $1 - $3; }
+
+        | expression '*' expression     { $$ = $1 * $3; }
+
+        | expression '/' expression     { $$ = $1 / $3; }
+
+        | '(' expression ')'            { $$ = $2; }
+
+        ;
 
 %%
 
@@ -73,6 +113,25 @@ void yyerror(char *s) {
 int yywrap()
 {
 return 1;
+}
+
+int find_symbol_table_index(char *var)
+{
+  int i;
+  for (i = 0; i < index; i++) {
+    if (strcmp(symbol_table[i].name, var) == 0) return 0;
+  }
+  return index;
+}
+
+void assignment(char *name, int ival, float fval, char *type)
+{
+  int i = find_symbol_table_index(name);
+  symbol_table[i].data_type = type;
+  symbol_table[i].name = name;
+  symbol_table[i].ival = ival;
+  symbol_table[i].fval = fval;
+  if (i == index) index++;
 }
 
 int main(void)

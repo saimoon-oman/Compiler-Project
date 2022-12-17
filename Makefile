@@ -1,5 +1,6 @@
 make:
 		bison -d project2.y
-		gcc project2.tab.c lex.yy.c
+		flex project2.l
+		gcc lex.yy.c project2.tab.c
 		a
 		
